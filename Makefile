@@ -2,6 +2,7 @@ init: docker-up composer-install
 
 #all
 docker-up: docker-down
+	-mkdir .symfony5
 	docker compose up -d --build
 
 docker-log: docker-down
@@ -45,6 +46,8 @@ symfony-check-requirements:
 	docker compose exec php_fpm symfony check:requirements
 
 symfony-install:
+	
+	docker compose exec --user $(shell id -u):$(shell id -g) php_fpm sh -c "rm -f README.md"
 	docker compose exec --user $(shell id -u):$(shell id -g) php_fpm symfony new ./ --version="7.2.x" --webapp --no-git
 
 
